@@ -4,9 +4,148 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CustomerLog"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" 
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <TabControl Grid.ColumnSpan="2" Margin="5">
+            <TabItem Header="Customer List">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <DataGrid Name="CustomerList" AlternatingRowBackground="LightBlue" AlternationCount="2" AutoGenerateColumns="False" CanUserAddRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Company Name" Binding="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Address" Binding="{Binding Address, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Purchase Date" Binding="{Binding PurchaseDate, Mode=OneWay}"></DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Logs">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <ComboBox Name="SelectedCustomer" DisplayMemberPath="Name" SelectedValuePath="Id" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="5" IsEditable="True" IsReadOnly="True" Text="Please Select A Customer" SelectedIndex="-1" SelectionChanged="SelectedCustomer_SelectionChanged" />
+                    <TextBlock Grid.Row="1" Text="Voicemail Logs" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="5"></TextBlock>
+                    <DataGrid Name="VoicemailLog" Grid.Row="2" AlternatingRowBackground="LightBlue" AlternationCount="2" AutoGenerateColumns="False" CanUserAddRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Contact Name" Binding="{Binding ContactName, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Received Time" Binding="{Binding ReceivedTime, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Phone Number" Binding="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Message Summary" Binding="{Binding MessageSummary, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></DataGridTextColumn>
+                            <DataGridCheckBoxColumn Header="Is Responded" Binding="{Binding IsResponded, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></DataGridCheckBoxColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <TextBlock Grid.Row="3" Text="Email Logs" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="5"></TextBlock>
+                    <DataGrid Grid.Row="4" Name="EmailLog" AlternatingRowBackground="LightBlue" AlternationCount="2" AutoGenerateColumns="False"  CanUserAddRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Contact Name" Binding="{Binding ContactName, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Received Time" Binding="{Binding ReceivedTime, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Email" Binding="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Subject" Binding="{Binding Subject, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Text" Binding="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></DataGridTextColumn>
+                            <DataGridCheckBoxColumn Header="Is Responded" Binding="{Binding IsResponded, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"></DataGridCheckBoxColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Add New Customer">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Compnay Name" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"></TextBlock>
+                    <TextBox x:Name="Name" Grid.Column="1" Width="250" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"></TextBox>
+                    <TextBlock Grid.Row="1" Text="Address" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"></TextBlock>
+                    <TextBox x:Name="Address" Grid.Row="1" Grid.Column="1" Width="250" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"></TextBox>
+                    <TextBlock Grid.Row="2" Text="Purchase Date" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5"></TextBlock>
+                    <Calendar x:Name="PurchaseDate" Grid.Row="2" Grid.Column="1" Width="250" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"></Calendar>
+                    <Button Name="CustomerSave" Content="Save" Grid.Row="3" Grid.ColumnSpan="2" Click="CustomerSave_Click"></Button>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Create Voicemail Log">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Select Customer" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"></TextBlock>
+                    <ComboBox Name="SelectedCustomer1" Grid.Column="1" DisplayMemberPath="Name" SelectedValuePath="Id" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
+                    <TextBlock Text="Contact Name" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"></TextBlock>
+                    <TextBox x:Name="ContactName" Grid.Row="1"  Grid.Column="1" Width="250" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"></TextBox>
+                    <TextBlock Text="Phone Number" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"></TextBlock>
+                    <TextBox x:Name="PhoneNumber" Grid.Row="2" Grid.Column="1" Width="250" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"></TextBox>
+                    <TextBlock Text="Message Summary" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"></TextBlock>
+                    <TextBox x:Name="MessageSummary" Grid.Row="3" Grid.Column="1" Width="250" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"></TextBox>
+                    <TextBlock Text="Is Responded" Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"></TextBlock>
+                    <CheckBox x:Name="IsReponded" Grid.Row="4" Grid.Column="1" HorizontalAlignment ="Left" VerticalAlignment="Bottom" Margin="5"/>
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="Received Time" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"></TextBlock>
+                    <xctk:DateTimePicker x:Name="ReceivedTime" Grid.Row="5" Grid.Column="1" Margin="5" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                    <Button Grid.Row="6" Grid.Column="1" Content="Create Voicemail Log" Name="CreateVoicemailLog" HorizontalAlignment="Left" Margin="5" Click="CreateVoicemailLog_Click"></Button>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Create Email Log">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Select Customer" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"></TextBlock>
+                    <ComboBox Name="SelectedCustomer2" Grid.Column="1" DisplayMemberPath="Name" SelectedValuePath="Id" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
+                    <TextBlock Text="Contact Name" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"></TextBlock>
+                    <TextBox x:Name="ContactName2" Grid.Row="1"  Grid.Column="1" Width="250" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"></TextBox>
+                    <TextBlock Text="Email" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"></TextBlock>
+                    <TextBox x:Name="Email" Grid.Row="2" Grid.Column="1" Width="250" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"></TextBox>
+                    <TextBlock Text="Subject" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"></TextBlock>
+                    <TextBox x:Name="Subject" Grid.Row="3" Grid.Column="1" Width="250" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"></TextBox>
+                    <TextBlock Text="Text" Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"></TextBlock>
+                    <TextBox x:Name="Text" Grid.Row="4" Grid.Column="1" Width="250" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"></TextBox>
+                    <TextBlock Text="Is Responded" Grid.Row="5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"></TextBlock>
+                    <CheckBox x:Name="IsReponded2" Grid.Row="5" Grid.Column="1" HorizontalAlignment ="Left" VerticalAlignment="Bottom" Margin="5"/>
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="Received Time" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5"></TextBlock>
+                    <xctk:DateTimePicker x:Name="ReceivedTime2" Grid.Row="6" Grid.Column="1" Margin="5" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                    <Button Grid.Row="7" Grid.Column="1" Content="Create Email Log" Name="CreateEmailLog" HorizontalAlignment="Left" Margin="5" Click="CreateEmailLog_Click"></Button>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
